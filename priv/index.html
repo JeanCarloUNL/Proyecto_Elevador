@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Control Elevador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+        }
+        #output {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Control Del Ascensor</h1>
+        <div class="buttons">
+            <button onclick="request(1)">Solicitar Planta 1</button>
+            <button onclick="request(2)">Solicitar Planta 2</button>
+            <button onclick="request(3)">Solicitar Planta 3</button>
+            <button onclick="request(4)">Solicitar Planta 4</button>
+        </div>
+        <div class="buttons">
+            <button onclick="move('up')">Ascender</button>
+            <button onclick="move('down')">Bajar</button>
+        </div>
+        <div class="buttons">
+            <button onclick="getFloor()">Obtener Planata Actual</button>
+            <button onclick="getStatus()">Obtener Estado del Elvador</button>
+        </div>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function request(floor) {
+            $.ajax({
+                url: "http://localhost:8080/request",
+                type: 'POST',
+                data: JSON.stringify({floor: floor}),
+                success: function(data) {
+                    $("#output").text(data);
+                },
+                contentType: "application/json",
+                dataType: 'text',
+                error: function(jqXHR, textStatus, errorThrown) {
+                $("#output").text("Error: " + textStatus + ", " + errorThrown);
+                }
+            });
+        }
+    
+        function move(direction) {
+            $.ajax({
+                url: "http://localhost:8080/move",
+                type: 'POST',
+                data: JSON.stringify({direction: direction}),
+                success: function(data) {
+                    $("#output").text(data);
+                },
+                contentType: "application/json",
+                dataType: 'text',
+                error: function(jqXHR, textStatus, errorThrown) {
+                $("#output").text("Error: " + textStatus + ", " + errorThrown);
+                }
+            });
+        }
+    
+        function getFloor() {
+            $.ajax({
+                url: "http://localhost:8080/floor",
+                type: 'GET',
+                success: function(data) {
+                    $("#output").text("Current floor: " + data);
+                },
+                dataType: 'text',
+                error: function(jqXHR, textStatus, errorThrown) {
+                $("#output").text("Error: " + textStatus + ", " + errorThrown);
+                }
+            });
+        }
+    
+        function getStatus() {
+            $.ajax({
+                url: "http://localhost:8080/status",
+                type: 'GET',
+                success: function(data) {
+                    $("#output").text("Elevator status: " + data);
+                },
+                dataType: 'text',
+                error: function(jqXHR, textStatus, errorThrown) {
+                $("#output").text("Error: " + textStatus + ", " + errorThrown);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Elevator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Elevator</h1>
+    <button onclick="request(1)">Request Floor 1</button>
+    <button onclick="request(2)">Request Floor 2</button>
+    <button onclick="request(3)">Request Floor 3</button>
+    <button onclick="request(4)">Request Floor 4</button>
+    <button onclick="move('up')">Move Up</button>
+    <button onclick="move('down')">Move Down</button>
+    <button onclick="getFloor()">Get Current Floor</button>
+    <button onclick="getStatus()">Get Elevator Status</button>
+    <div id="output"></div>
+
+    <script>
+        function request(floor) {
+            $.post("http://localhost:8080/request", JSON.stringify({floor: floor}), function(data) {
+                $("#output").text(data);
+            });
+        }
+
+        function move(direction) {
+            $.post("http://localhost:8080/move", JSON.stringify({direction: direction}), function(data) {
+                $("#output").text(data);
+            });
+        }
+
+        function getFloor() {
+            $.get("http://localhost:8080/floor", function(data) {
+                $("#output").text("Current floor: " + data);
+            });
+        }
+
+        function getStatus() {
+            $.get("http://localhost:8080/status", function(data) {
+                $("#output").text("Elevator status: " + data);
+            });
+        }
+    </script>
+</body>
+</html> -->

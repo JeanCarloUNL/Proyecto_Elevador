@@ -1,0 +1,20 @@
+{application, elevator,
+ [
+  {description, "An OTP application"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {mod, {elevator_app, []}},
+  {applications,
+   [kernel,
+    stdlib,
+    ranch,
+    cowboy,
+    cowlib
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {licenses, ["Apache-2.0"]},
+  {links, []}
+ ]}.
+
